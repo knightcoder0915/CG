@@ -1,0 +1,207 @@
+#include <graphics.h>
+#include<stdio.h>
+#include<conio.h>
+#include <stdlib.h>
+#include<dos.h>
+
+void initialise(void);
+void startscreen(void);
+void m_right(int,int,int,int);
+void m_left(int,int,int,int);
+void m_up(int,int,int,int);
+void m_down(int,int,int,int);
+void grid();
+int main(void)
+{
+int gdriver = DETECT, gmode;
+int xmax, ymax,midx,midy;
+/* Intialize the graphices system*/
+initgraph(&gdriver, &gmode, "C:\\TurboC3\\BGI");
+/* intialize randonm number generator wih a random value */
+ randomize ();
+ startscreen();
+//==============MAIN FUNCTIONS=================//
+grid();
+m_right(80,360,560,360);
+m_up(560,360,560,80);
+m_left(560,80,80,80);
+m_down(80,80,80,360);
+getch();
+clrscr();
+settextstyle(0,0,4);
+outtextxy(160,160,"GAME OVER");
+settextstyle(0,0,2);
+getch();
+return 0;
+}
+void startscreen(void)
+{
+	int i;
+ int loop;
+/* get maximum x and y screen coordinates*/
+ int xmax,ymax,midx,midy;
+ xmax= getmaxx();
+ ymax= getmaxy();
+
+/* calculate the center of the screen*/
+
+ midx= xmax/2;
+ midy=ymax/2;
+
+/* draw a double-lined box*/
+ setcolor(GREEN);
+ rectangle (0,0,xmax,320);
+ setcolor(BLUE);
+ rectangle (2,2,xmax-2,ymax-2);
+ setcolor(YELLOW);
+/* Draw two vertical lines*/
+ line (55,1,55,ymax-2);
+ line (xmax-55,1,xmax-55,ymax-2);
+
+/*display the string EATER,horizontally */
+ setcolor(6);
+ settextjustify (CENTER_TEXT,CENTER_TEXT);
+ settextstyle(4,HORIZ_DIR,5);
+ outtextxy (midx,midy,"The PacMan");
+  settextstyle(3,HORIZ_DIR,1);
+ outtextxy(midx-20,350,"Vedant Sawant-52");
+ outtextxy(midx-20,400,"Tanvi Shetty-55");
+ outtextxy(midx-20,450,"Shreyas Udupa-62");
+
+
+/* Place the eater character at random on the start screen*/
+
+
+ randomize();
+ for(loop=0; loop<40;loop++)
+ {
+  gotoxy(rand() % 80,rand()%25);
+  printf("%c",2);
+  delay(100);
+ }
+/* Clear the area enclosed by the double-lined boundry */
+
+ setviewport (0,0,xmax,ymax,1);
+
+ clearviewport();
+
+/* Draw the screen for display instructions*/
+ setcolor(BLUE);
+ rectangle(30,0,xmax-33,ymax);
+
+ setcolor(YELLOW);
+for (i=15;i<=ymax-15;i+=15)
+
+ {
+  ellipse(15,i,0,360,6,3);
+  ellipse(xmax-15,i,0,360,6,3);
+ }
+ setcolor(5);
+ settextjustify (CENTER_TEXT,TOP_TEXT);
+ settextstyle(5,HORIZ_DIR,9);
+ outtextxy (midx,60,"-PACMAN-");
+
+/*display instruction*/
+ settextstyle(2,HORIZ_DIR,5);
+ outtextxy(300,300,"Watch Pacman eat the bugs");
+/*Wait for key press*/
+ while(!kbhit());
+/*Flush the keyboard buffer*/
+ if (getch()==0)
+  getch();
+setviewport(0,0,xmax,ymax,1);
+rectangle(0,0,xmax,ymax);
+clearviewport();
+}
+
+//=========FUNCTION FOR GRID FORMATION============//
+void grid()
+{ int j,i;
+setcolor(8);
+outtextxy(400,460,"Pacman");
+setcolor(9);
+for(i=40;i<640;i++)
+{for(j=40;j<480;j++)
+{if(i%40==0&&j%40==0)
+{outtextxy(i,j,"x");
+}
+}
+}
+}
+//=============FUNTION FOR MOVING RIGHT========//
+void m_right(int a,int b,int c,int d)
+{
+int k,s,e;
+s=30,e=330;
+for(k=a;k<c;k++)
+{if(s==0)
+{s=30;e=330;
+}
+setfillstyle(SOLID_FILL,14);
+pieslice(k,b,s,e,25);
+setfillstyle(SOLID_FILL,0);
+pieslice(k,b-15,0,360,5);
+setcolor(0);
+delay(15);
+circle(k,b,25);
+s=s-1;e=e+1;
+}
+}
+//=========FUNCTION FOR MOVING LEFT===========//
+void m_left(int a,int b,int c,int d)
+{
+int k,s,e;
+s=150,e=210;
+for(k=a;k>c;k--)
+{if(s==180)
+{s=150;e=210;
+}
+setfillstyle(SOLID_FILL,14);
+pieslice(k,b,0,360,25);
+setfillstyle(SOLID_FILL,0);
+pieslice(k,b-15,0,360,5);
+pieslice(k,b,s,e,25);
+setcolor(0);
+delay(15);
+circle(k,b,25);
+s=s+1;e=e-1;
+}
+}
+//========FUNCTION FOR MOVING UP=============//
+void m_up(int a,int b,int c,int d)
+{ int l,s,e;
+s=60,e=120;
+for(l=b;l>d;l--)
+{if(s==90)
+{s=60;e=120;
+}
+setfillstyle(SOLID_FILL,14);
+pieslice(a,l,0,360,25);
+setfillstyle(SOLID_FILL,0);
+pieslice(a-15,l,0,360,5);
+pieslice(a,l,s,e,25);
+setcolor(0);
+delay(15);
+circle(a,l,25);
+s=s+1;e=e-1;
+}
+}
+//========FUNCTION FOR MOVING DOWN==============//
+void m_down(int a,int b,int c,int d)
+{ int l,s,e;
+s=250,e=300;
+for(l=b;l<d;l++)
+{if(s==270)
+{s=250;e=300;
+}
+setfillstyle(SOLID_FILL,14);
+pieslice(a,l,0,360,25);
+setfillstyle(SOLID_FILL,0);
+pieslice(a-15,l,0,360,5);
+pieslice(a,l,s,e,25);
+setcolor(0);
+delay(15);
+circle(a,l,25);
+s=s+1;e=e-1;
+}
+}
